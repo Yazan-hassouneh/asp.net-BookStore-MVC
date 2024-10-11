@@ -1,0 +1,9 @@
+﻿footer {
+    margin : 0px !important;
+}
+.wrapper {
+    min-height : 100vh;
+}
+.content {
+    min-height : 80vh;
+}
