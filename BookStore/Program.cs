@@ -1,5 +1,6 @@
 using BookStore.Data;
 using BookStore.Repository.BaseRepository;
+using BookStore.Units;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,7 +23,8 @@ namespace BookStore
 			builder.Services.AddControllersWithViews();
 
 			///
-			builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+			//builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+			builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 
 			var app = builder.Build();
 

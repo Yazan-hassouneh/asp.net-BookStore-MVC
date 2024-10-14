@@ -1,6 +1,7 @@
 ﻿
 using BookStore.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace BookStore.Repository.BaseRepository
 {
@@ -8,45 +9,57 @@ namespace BookStore.Repository.BaseRepository
     {
         private readonly ApplicationDbContext _context = context;
 
-        public async Task<T?> GetById(int id)
+        public async Task<T?> GetByIdAsync(int id)
         {
             return await _context.Set<T>().FindAsync(id);
         }
-        public async Task<IEnumerable<T>> GetAll()
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
             return await _context.Set<T>().ToListAsync();
         }
-        public Task Create<VM>(VM VMModel)
+        public async Task<T?> FindAsync(Expression<Func<T, bool>> matcher)
         {
-            throw new NotImplementedException();
-        }
-        public Task<T> Update<VM>(VM VMModel)
+            return await _context.Set<T>().SingleOrDefaultAsync(matcher);
+        }        
+        public async Task<T?> FindAsync(Expression<Func<T, bool>> matcher, string[] Includes)
         {
-            throw new NotImplementedException();
-        }
+            IQueryable<T> query = _context.Set<T>();
 
-        public async Task<bool> Delete(int id)
-        {
-            bool isDeleted = false;
-            var row = await _context.Set<T>().FindAsync(id);
-
-            if (row is null) return isDeleted;
-
-            _context.Set<T>().Remove(row);
-
-            int effectedRows = await _context.SaveChangesAsync();
-            if (effectedRows > 0)
+            if(Includes != null)
             {
-                isDeleted = true;
-                //DeleteCover(game.Cover);
+                foreach (var Include in Includes) query.Include(Include);
             }
 
-            return isDeleted;
+            return await query.SingleOrDefaultAsync(matcher);
+        }
+        public async Task<IEnumerable<T>?> FindAllAsync(Expression<Func<T, bool>> matcher, string[] Includes)
+        {
+            IQueryable<T> query = _context.Set<T>();
+
+            if(Includes is not null)
+            {
+                foreach (var Include in Includes) query.Include(Include);
+            }
+
+            return await query.Where(matcher).ToListAsync();
+        }
+        public async Task<T> AddAsync(T entity)
+        {
+            await _context.Set<T>().AddAsync(entity);
+            return entity;
+        }
+        public T Update(T entity)
+        {
+            _context.Set<T>().Update(entity);
+            return entity;
+        }
+        public void Delete(T entity)
+        {
+            _context.Set<T>().Remove(entity);
         }
         public async void Save()
         {
             await _context.SaveChangesAsync();
         }
-
     }
 }
