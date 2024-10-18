@@ -1,6 +1,4 @@
-﻿using BookStore.Models;
-using BookStore.Settings;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BookStore.Configuration.BaseModelConfiguration

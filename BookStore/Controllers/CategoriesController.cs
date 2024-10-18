@@ -1,11 +1,4 @@
-﻿using AutoMapper;
-using BookStore.Files;
-using BookStore.Models;
-using BookStore.Settings;
-using BookStore.Units;
-using BookStore.VM.CategoryVMs;
-using FluentValidation;
-using Microsoft.AspNetCore.Mvc;
+﻿
 
 namespace BookStore.Controllers
 {
@@ -14,24 +7,29 @@ namespace BookStore.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IImageMethods _categoryImageMethods;
         private readonly IMapper _mapper;
-		private readonly IValidator<CategoryVM> _categoryValidator;
+        private readonly IWebHostEnvironment _webHostEnv;
 		private readonly IValidator<CreateCategoryVM> _createCategoryValidator;
-		public CategoriesController(IUnitOfWork unitOfWork, IImageMethods categoryImageMethods, IMapper mapper, IValidator<CategoryVM> categoryValidator, IValidator<CreateCategoryVM> createCategoryValidator)
+		public CategoriesController(IUnitOfWork unitOfWork, IImageMethods categoryImageMethods, IMapper mapper, IValidator<CreateCategoryVM> createCategoryValidator)
         {
             _unitOfWork = unitOfWork;
             _categoryImageMethods = categoryImageMethods;
 			_categoryImageMethods.SetImagePath(FileSettings.CategoriesImagesPath);
             _mapper = mapper;
-            _categoryValidator = categoryValidator;
+            //_webHostEnv = webHostEnv;
             _createCategoryValidator = createCategoryValidator;
 		}
         public async Task<IActionResult?> Index()
         {
             IEnumerable<Category> categories = await _unitOfWork.Categories.GetAllAsync();
 
-            categories = categories.ToList();
+            List<CategoryVM> categoriesVm = [];
 
-            return View(categories);
+            foreach (var category in categories.ToList())
+            {
+                categoriesVm.Add(_mapper.Map<CategoryVM>(category));
+            }
+
+            return View(categoriesVm);
         }
 		public IActionResult Add()
 		{
@@ -64,6 +62,7 @@ namespace BookStore.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Update(int id)
         {
+
             return View();
         }
         [HttpDelete]
@@ -71,9 +70,12 @@ namespace BookStore.Controllers
         {
             return View();
         }
-        public IActionResult Details(int id)
+        public async Task<IActionResult?> Details(int id)
         {
-            return View();
+            Category category = await _unitOfWork.Categories.GetByIdAsync(id);
+            if(category is null) RedirectToAction(nameof(NotFound));
+            CategoryVM categoryVM = _mapper.Map<CategoryVM>(category);
+            return View(categoryVM);
         }
     }
 }

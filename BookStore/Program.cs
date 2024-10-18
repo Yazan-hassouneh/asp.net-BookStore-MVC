@@ -36,7 +36,6 @@ namespace BookStore
 			// Fluent Validation
 			builder.Services.AddFluentValidationAutoValidation();
 			builder.Services.AddFluentValidationClientsideAdapters();
-			builder.Services.AddScoped<IValidator<CategoryVM>, CategoryVMValidation>();
 			builder.Services.AddScoped<IValidator<CreateCategoryVM>, CreateCategoryVMValidation>();
 
 			var app = builder.Build();
