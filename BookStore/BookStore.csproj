@@ -8,6 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="FluentValidation" Version="11.10.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.4" />
@@ -16,13 +19,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Configuration\Mappers\" />
-    <Folder Include="Configuration\VMConfiguration\" />
     <Folder Include="Repository\BookRepository\" />
     <Folder Include="Repository\AuthorRepository\" />
     <Folder Include="Repository\CategoryRepository\" />
     <Folder Include="Repository\PublisherRepository\" />
-    <Folder Include="VM\" />
+    <Folder Include="wwwroot\Assets\Img\CategoriesImages\" />
+    <Folder Include="wwwroot\Assets\Img\BooksImages\" />
+    <Folder Include="wwwroot\Assets\Img\AuthorsImages\" />
+    <Folder Include="wwwroot\Assets\Img\PublishersImages\" />
   </ItemGroup>
 
 </Project>

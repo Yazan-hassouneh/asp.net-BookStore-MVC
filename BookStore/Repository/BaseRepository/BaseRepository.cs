@@ -57,7 +57,7 @@ namespace BookStore.Repository.BaseRepository
         {
             _context.Set<T>().Remove(entity);
         }
-        public async void Save()
+        public async Task Save()
         {
             await _context.SaveChangesAsync();
         }

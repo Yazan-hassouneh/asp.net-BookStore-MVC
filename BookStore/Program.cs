@@ -1,8 +1,14 @@
+using BookStore.Configuration.Mappers;
 using BookStore.Data;
+using BookStore.Files;
 using BookStore.Repository.BaseRepository;
 using BookStore.Units;
+using FluentValidation.AspNetCore;
+using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using BookStore.VM.CategoryVMs;
+using BookStore.Configuration.VMValidation.CategoriesVMValidation;
 
 namespace BookStore
 {
@@ -22,9 +28,16 @@ namespace BookStore
 				.AddEntityFrameworkStores<ApplicationDbContext>();
 			builder.Services.AddControllersWithViews();
 
-			///
-			//builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+			///	Implement Repository Pattern
+			builder.Services.AddScoped<IImageMethods, ImageMethods>();
 			builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+			// Auto mapper
+			builder.Services.AddAutoMapper(typeof(CategoryProfile));
+			// Fluent Validation
+			builder.Services.AddFluentValidationAutoValidation();
+			builder.Services.AddFluentValidationClientsideAdapters();
+			builder.Services.AddScoped<IValidator<CategoryVM>, CategoryVMValidation>();
+			builder.Services.AddScoped<IValidator<CreateCategoryVM>, CreateCategoryVMValidation>();
 
 			var app = builder.Build();
 
