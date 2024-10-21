@@ -12,14 +12,14 @@ namespace BookStore.Repository.BaseRepository
         public async Task<T?> GetByIdAsync(int id)
         {
             return await _context.Set<T>().FindAsync(id);
-        }
+        }        
         public async Task<IEnumerable<T>> GetAllAsync()
         {
             return await _context.Set<T>().ToListAsync();
         }
         public async Task<T?> FindAsync(Expression<Func<T, bool>> matcher)
         {
-            return await _context.Set<T>().SingleOrDefaultAsync(matcher);
+            return await _context.Set<T>().AsNoTracking().SingleOrDefaultAsync(matcher);
         }        
         public async Task<T?> FindAsync(Expression<Func<T, bool>> matcher, string[] Includes)
         {
@@ -57,9 +57,10 @@ namespace BookStore.Repository.BaseRepository
         {
             _context.Set<T>().Remove(entity);
         }
-        public async Task Save()
+        public async Task<int> Save()
         {
-            await _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync();
+            
         }
     }
 }

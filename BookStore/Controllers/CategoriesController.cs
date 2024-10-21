@@ -1,22 +1,25 @@
 ﻿
 
+using FluentValidation;
+using FluentValidation.Results;
+
 namespace BookStore.Controllers
 {
     public class CategoriesController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IImageMethods _categoryImageMethods;
+        private readonly IImageMethods _ImageMethods;
         private readonly IMapper _mapper;
-        private readonly IWebHostEnvironment _webHostEnv;
 		private readonly IValidator<CreateCategoryVM> _createCategoryValidator;
-		public CategoriesController(IUnitOfWork unitOfWork, IImageMethods categoryImageMethods, IMapper mapper, IValidator<CreateCategoryVM> createCategoryValidator)
+		private readonly IValidator<UpdateCategoryVM> _updateCategoryValidator;
+		public CategoriesController(IUnitOfWork unitOfWork, IImageMethods ImageMethods, IMapper mapper, IValidator<CreateCategoryVM> createCategoryValidator, IValidator<UpdateCategoryVM> updateCategoryValidator)
         {
             _unitOfWork = unitOfWork;
-            _categoryImageMethods = categoryImageMethods;
-			_categoryImageMethods.SetImagePath(FileSettings.CategoriesImagesPath);
+			_ImageMethods = ImageMethods;
+			_ImageMethods.SetImagePath(FileSettings.CategoriesImagesPath);
             _mapper = mapper;
-            //_webHostEnv = webHostEnv;
             _createCategoryValidator = createCategoryValidator;
+            _updateCategoryValidator = updateCategoryValidator;
 		}
         public async Task<IActionResult?> Index()
         {
@@ -43,14 +46,11 @@ namespace BookStore.Controllers
             var modelResult = _createCategoryValidator.Validate(vm);
             if(!modelResult.IsValid)
             {
-				foreach (var error in modelResult.Errors)
-				{
-					ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-				}
-                return View(vm);
+                AddErrorToModelResult(modelResult);
+				return View(vm);
 			}
             //Save Image
-            string imageName = await _categoryImageMethods.SaveImage(vm.Image);
+            string imageName = await _ImageMethods.SaveImage(vm.Image);
             //mapping
             var category = _mapper.Map<Category>(vm);
             category.ImagePath = imageName;
@@ -58,24 +58,81 @@ namespace BookStore.Controllers
             await _unitOfWork.Categories.Save();
             return RedirectToAction(nameof(Index));
         }
-        [HttpPost]
+		public async Task<IActionResult> Update(int id)
+		{
+            var category = await _unitOfWork.Categories.GetByIdAsync(id);
+            if(category is null) return NotFound();
+            var UpdateCategoryVm = _mapper.Map<UpdateCategoryVM>(category);
+			return View(UpdateCategoryVm);
+		}
+		[HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Update(int id)
+        public async Task<IActionResult> Update(UpdateCategoryVM vm)
         {
+			var modelResult = _updateCategoryValidator.Validate(vm);
+			if (!modelResult.IsValid)
+			{
+                AddErrorToModelResult(modelResult);
+				return View(vm);
+			}
+            Category? category = await _unitOfWork.Categories.FindAsync(x => x.Id == vm.Id);
+            if (category == null) BadRequest(ModelState);
 
-            return View();
+			bool hasNewImage = vm.Image is not null;
+			string? oldImagePath = category?.ImagePath;
+            DateTime createdOn = category?.CreatedOn ?? DateTime.MinValue;
+
+            category = _mapper.Map<Category>(vm);
+            category.CreatedOn = createdOn;
+
+            if (hasNewImage) 
+            {
+                category.ImagePath = await _ImageMethods.SaveImage(vm.Image!);
+			}else
+            {
+                category.ImagePath = oldImagePath;
+            }
+
+            _unitOfWork.Categories.Update(category);
+            int effectedRows = await _unitOfWork.Categories.Save();
+
+            if (effectedRows > 0)
+            {
+                if(hasNewImage) _ImageMethods.DeleteImage(oldImagePath!);
+                return RedirectToAction(nameof(Index));
+            } 
+
+            _ImageMethods.DeleteImage(category.ImagePath);
+			return BadRequest(ModelState);
         }
         [HttpDelete]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            return View();
+            Category? category = await _unitOfWork.Categories.GetByIdAsync(id);
+            if (category is null) NotFound();
+            _unitOfWork.Categories.Delete(category);
+            int effectedRows = await _unitOfWork.Categories.Save();
+            if (effectedRows > 0) _ImageMethods.DeleteImage(category.ImagePath);
+
+            return Ok();
         }
         public async Task<IActionResult?> Details(int id)
         {
-            Category category = await _unitOfWork.Categories.GetByIdAsync(id);
-            if(category is null) RedirectToAction(nameof(NotFound));
+            Category? category = await _unitOfWork.Categories.GetByIdAsync(id);
+            if (category is null)
+            {
+                return RedirectToAction(nameof(NotFound));
+            }
             CategoryVM categoryVM = _mapper.Map<CategoryVM>(category);
             return View(categoryVM);
         }
+        private void AddErrorToModelResult(ValidationResult modelResult)
+        {
+			foreach (var error in modelResult.Errors)
+			{
+				ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+			}
+		}
+
     }
 }

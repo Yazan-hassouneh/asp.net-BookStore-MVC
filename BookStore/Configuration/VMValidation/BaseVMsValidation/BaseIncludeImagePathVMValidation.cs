@@ -1,5 +1,4 @@
-﻿using BookStore.VM.BaseVMs;
-using FluentValidation;
+﻿
 
 namespace BookStore.Configuration.VMValidation.BaseVMValidation
 {

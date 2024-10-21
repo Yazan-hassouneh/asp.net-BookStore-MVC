@@ -1,4 +1,4 @@
-﻿using BookStore.VM.BaseVMs;
+﻿
 
 namespace BookStore.Configuration.VMValidation.BaseVMValidation
 {

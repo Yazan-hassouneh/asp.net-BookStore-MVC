@@ -12,6 +12,6 @@ namespace BookStore.Repository.BaseRepository
         Task<T> AddAsync(T entity);
         T Update(T entity);
         void Delete(T entity);
-        Task Save();
+        Task<int> Save();
     }
 }

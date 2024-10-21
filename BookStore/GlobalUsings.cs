@@ -6,3 +6,4 @@ global using BookStore.Settings;
 global using BookStore.Units;
 global using FluentValidation;
 global using Microsoft.AspNetCore.Mvc;
+global using BookStore.VM.BaseVMs;

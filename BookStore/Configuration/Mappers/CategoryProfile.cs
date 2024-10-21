@@ -14,6 +14,11 @@ namespace BookStore.Configuration.Mappers
 				)
 				.ReverseMap();
 			CreateMap<Category, CreateCategoryVM>().ReverseMap();
+			CreateMap<UpdateCategoryVM, Category>()
+				.ForMember(destination => destination.CreatedOn, 
+							option => option.Ignore()
+				)
+				.ReverseMap();
 				
 		}
 

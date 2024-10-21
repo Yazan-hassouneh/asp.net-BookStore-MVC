@@ -1,13 +1,8 @@
 using BookStore.Configuration.Mappers;
 using BookStore.Data;
-using BookStore.Files;
-using BookStore.Repository.BaseRepository;
-using BookStore.Units;
 using FluentValidation.AspNetCore;
-using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using BookStore.VM.CategoryVMs;
 using BookStore.Configuration.VMValidation.CategoriesVMValidation;
 
 namespace BookStore
@@ -28,7 +23,7 @@ namespace BookStore
 				.AddEntityFrameworkStores<ApplicationDbContext>();
 			builder.Services.AddControllersWithViews();
 
-			///	Implement Repository Pattern
+			///	Implement Repository Pattern 
 			builder.Services.AddScoped<IImageMethods, ImageMethods>();
 			builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 			// Auto mapper
@@ -37,6 +32,7 @@ namespace BookStore
 			builder.Services.AddFluentValidationAutoValidation();
 			builder.Services.AddFluentValidationClientsideAdapters();
 			builder.Services.AddScoped<IValidator<CreateCategoryVM>, CreateCategoryVMValidation>();
+			builder.Services.AddScoped<IValidator<UpdateCategoryVM>, UpdateCategoryVMValidation>();
 
 			var app = builder.Build();
 
@@ -52,6 +48,7 @@ namespace BookStore
 				app.UseHsts();
 			}
 
+			app.UseStatusCodePagesWithRedirects("/Home/Error?statusCode={0}");
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
 

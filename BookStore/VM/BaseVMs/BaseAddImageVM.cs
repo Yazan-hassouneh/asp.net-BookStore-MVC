@@ -8,6 +8,6 @@ namespace BookStore.VM.BaseVMs
     {
         [AllowedExtension(FileSettings.ImagesAllowedExtension)]
         [FileMaxSize(FileSettings.ImagesMaxSizeInBytes)]
-        public IFormFile Image { get; set; } = null!;
+        public IFormFile? Image { get; set; }
     }
 }
