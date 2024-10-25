@@ -223,6 +223,12 @@
                                 <i class="nav-icon fas fa-th"></i>
                                 <p>Category</p>
                             </a>
+                        </li>                        
+                        <li class="nav-item">
+                            <a asp-controller="Author" asp-action="Index" class="nav-link">
+                                <i class="nav-icon fas fa-th"></i>
+                                <p>Authors</p>
+                            </a>
                         </li>
                     </ul>
                 </nav>
@@ -235,22 +241,16 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Starter Page</h1>
-                        </div><!-- /.col -->
-                        <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">Starter Page</li>
-                            </ol>
-                        </div><!-- /.col -->
-                    </div><!-- /.row -->
-                </div><!-- /.container-fluid -->
+                            <h1 class="m-0">@RenderSection("Header", required : true)</h1>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="content">
                 <div class="container-fluid">
                     <div class="row">
                         @RenderBody()
-                    </div
+                    </div>
                 </div>
             </div>
         </div>

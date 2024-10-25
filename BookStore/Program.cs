@@ -4,6 +4,9 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using BookStore.Configuration.VMValidation.CategoriesVMValidation;
+using BookStore.Configuration.VMValidation.AuthorVMValidation;
+using BookStore.VM.PublisherVMs;
+using BookStore.Configuration.VMValidation.PublisherNMValidation;
 
 namespace BookStore
 {
@@ -28,11 +31,16 @@ namespace BookStore
 			builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 			// Auto mapper
 			builder.Services.AddAutoMapper(typeof(CategoryProfile));
+			builder.Services.AddAutoMapper(typeof(AuthorProfile));
 			// Fluent Validation
 			builder.Services.AddFluentValidationAutoValidation();
 			builder.Services.AddFluentValidationClientsideAdapters();
 			builder.Services.AddScoped<IValidator<CreateCategoryVM>, CreateCategoryVMValidation>();
 			builder.Services.AddScoped<IValidator<UpdateCategoryVM>, UpdateCategoryVMValidation>();
+			builder.Services.AddScoped<IValidator<UpdateAuthorVM>, UpdateAuthorVMValidation>();
+			builder.Services.AddScoped<IValidator<CreateAuthorVM>, CreateAuthorVMValidation>();			
+			builder.Services.AddScoped<IValidator<UpdatePublisherVM>, UpdatePublisherVMValidation>();
+			builder.Services.AddScoped<IValidator<CreatePublisherVM>, CreatePublisherVMValidation>();
 
 			var app = builder.Build();
 

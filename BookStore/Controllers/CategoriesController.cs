@@ -1,6 +1,5 @@
 ﻿
 
-using FluentValidation;
 using FluentValidation.Results;
 
 namespace BookStore.Controllers
@@ -44,25 +43,29 @@ namespace BookStore.Controllers
         {
             //Validate Vm
             var modelResult = _createCategoryValidator.Validate(vm);
-            if(!modelResult.IsValid)
+
+			if (AddErrorToModelResult(modelResult) || await NameValidate(vm.Name)) return View(vm);
+
+			string imageName = await _ImageMethods.SaveImage(vm.Image);
+            try
+            {
+                var category = _mapper.Map<Category>(vm);
+                category.ImagePath = imageName;
+                await _unitOfWork.Categories.AddAsync(category);
+                await _unitOfWork.Categories.Save();
+                return RedirectToAction(nameof(Index));
+            }
+            catch
             {
                 AddErrorToModelResult(modelResult);
-				return View(vm);
-			}
-            //Save Image
-            string imageName = await _ImageMethods.SaveImage(vm.Image);
-            //mapping
-            var category = _mapper.Map<Category>(vm);
-            category.ImagePath = imageName;
-            await _unitOfWork.Categories.AddAsync(category);
-            await _unitOfWork.Categories.Save();
-            return RedirectToAction(nameof(Index));
+                _ImageMethods.DeleteImage(imageName);
+                return View(vm);
+            }
         }
 		public async Task<IActionResult> Update(int id)
 		{
-            var category = await _unitOfWork.Categories.GetByIdAsync(id);
-            if(category is null) return NotFound();
-            var UpdateCategoryVm = _mapper.Map<UpdateCategoryVM>(category);
+            var UpdateCategoryVm = await UpdateCategory(id);
+            if(UpdateCategoryVm is null) return NotFound();
 			return View(UpdateCategoryVm);
 		}
 		[HttpPost]
@@ -70,12 +73,15 @@ namespace BookStore.Controllers
         public async Task<IActionResult> Update(UpdateCategoryVM vm)
         {
 			var modelResult = _updateCategoryValidator.Validate(vm);
-			if (!modelResult.IsValid)
-			{
-                AddErrorToModelResult(modelResult);
-				return View(vm);
-			}
-            Category? category = await _unitOfWork.Categories.FindAsync(x => x.Id == vm.Id);
+
+            if (AddErrorToModelResult(modelResult) || await NameValidate(vm.Name))
+            {
+				var UpdateCategoryVm = await UpdateCategory(vm.Id);
+				if (UpdateCategoryVm is null) return NotFound();
+				return View(UpdateCategoryVm);
+            }
+
+			Category? category = await _unitOfWork.Categories.FindAsync(x => x.Id == vm.Id);
             if (category == null) BadRequest(ModelState);
 
 			bool hasNewImage = vm.Image is not null;
@@ -126,13 +132,34 @@ namespace BookStore.Controllers
             CategoryVM categoryVM = _mapper.Map<CategoryVM>(category);
             return View(categoryVM);
         }
-        private void AddErrorToModelResult(ValidationResult modelResult)
+        private bool AddErrorToModelResult(ValidationResult modelResult)
         {
+			if (!modelResult.IsValid)
+			{
+                AddErrorToModelResult(modelResult);
+			}
 			foreach (var error in modelResult.Errors)
 			{
 				ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
 			}
-		}
+            return !modelResult.IsValid;
+        }
+        private async Task<bool> NameValidate(string name)
+        {
+            bool isExist = await _unitOfWork.Categories.CheckName(name);
 
+            if (isExist)
+            {
+                ModelState.AddModelError("Name", "The Category Already Exist");
+            }
+            return isExist;
+        }
+        private async Task<UpdateCategoryVM> UpdateCategory(int id)
+        {
+			var category = await _unitOfWork.Categories.GetByIdAsync(id);
+			var UpdateCategoryVm = _mapper.Map<UpdateCategoryVM>(category);
+
+            return UpdateCategoryVm;
+		}
     }
 }

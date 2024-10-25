@@ -2,9 +2,7 @@
 
 namespace BookStore.VM.CategoryVMs
 {
-	public class UpdateCategoryVM : BaseAddImageVM
+	public class UpdateCategoryVM : BaseUpdateVM
 	{
-		public string ImagePath { get; set; } = null!;
-		public DateTime UpdatedOn { get; set; } = DateTime.Now;
 	}
 }

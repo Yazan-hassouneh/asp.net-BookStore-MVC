@@ -2,7 +2,7 @@
 
 namespace BookStore.VM.CategoryVMs
 {
-    public class CategoryVM : BaseIncludeImagePathVM
+    public class CategoryVM : BaseUpdateVM
     {
         public int NumberOfBooksInCategory { get; set; }
     }

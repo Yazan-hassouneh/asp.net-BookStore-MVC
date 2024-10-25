@@ -3,6 +3,9 @@
 @{
 	ViewData["Title"] = "Add New category";
 }
+@section Header {
+    Category
+}
 
 <h2 class="text-center my-5">Add New Category To Your Store</h2>
 
@@ -11,7 +14,7 @@
 		<div class="row">
 			<div class="col-12 col-md-6">
 				<div class="">
-					<label asp-for="Name" class="form-label mt-4">Game Title</label>
+					<label asp-for="Name" class="form-label mt-4">Category Title</label>
 					<input asp-for="Name" type="text" class="form-control" placeholder="Enter Category Name">
 					<small class="form-text text-muted"><span asp-validation-for="Name" class="text-danger"></span></small>
 				</div>
@@ -26,8 +29,6 @@
 					<label asp-for="Image" class="form-label mt-4">Choose Cover</label>
 					<input asp-for="Image"
 						   type="file" class="form-control"
-						   placeholder="Enter Game Name"
-						   placeholder="Enter Game Name"
 						   data-rule-extension="@FileSettings.ImagesAllowedExtension.Replace(".", string.Empty)"
 						   data-msg-extension="Not Allowed Extension"
 						   data-rule-maxsize="@FileSettings.ImagesMaxSizeInBytes"

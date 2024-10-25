@@ -1,5 +1,7 @@
 ﻿using BookStore.Models;
-using BookStore.Repository.BaseRepository;
+using BookStore.Repository.BaseRepo;
+using BookStore.Repository.CategoryRepo;
+using BookStore.Repository.PublisherRepo;
 
 namespace BookStore.Units
 {
@@ -7,8 +9,8 @@ namespace BookStore.Units
     {
         public IBaseRepository<Book> Books { get; }
         public IBaseRepository<Author> Authors { get; }
-        public IBaseRepository<Category> Categories { get; }
-        public IBaseRepository<Publisher> Publishers { get; }
+        public ICategoryRepository Categories { get; }
+        public IPublisherRepository Publishers { get; }
         Task<int> Complete();
     }
 }

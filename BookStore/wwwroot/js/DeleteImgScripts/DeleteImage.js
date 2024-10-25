@@ -21,7 +21,8 @@ export default function Delete(controllerName) {
                 cancelButtonText: "No, cancel!",
                 reverseButtons: true
             }).then(async (result) => {
-                if (result.isConfirmed) {
+                if (result.isConfirmed) {  
+                    console.log("Ssss")
                     let EntityId = element.getAttribute("id")
                     const url = `/${controllerName}/Delete/${EntityId}`;
                     try {

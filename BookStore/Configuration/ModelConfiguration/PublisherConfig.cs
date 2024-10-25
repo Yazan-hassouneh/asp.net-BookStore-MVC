@@ -10,6 +10,7 @@ namespace BookStore.Configuration.ModelConfiguration
         {
             base.Configure(builder);
             builder.Property(x => x.Location).HasMaxLength(256);
-        }
+			builder.HasIndex(x => x.Name).IsUnique();
+		}
     }
 }

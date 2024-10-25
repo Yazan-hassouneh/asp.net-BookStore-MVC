@@ -3,7 +3,7 @@ using BookStore.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace BookStore.Repository.BaseRepository
+namespace BookStore.Repository.BaseRepo
 {
     public class BaseRepository<T>(ApplicationDbContext context) : IBaseRepository<T> where T : class
     {

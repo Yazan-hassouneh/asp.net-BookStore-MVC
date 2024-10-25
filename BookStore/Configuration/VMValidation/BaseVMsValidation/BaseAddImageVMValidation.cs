@@ -6,6 +6,7 @@ namespace BookStore.Configuration.VMValidation.BaseVMValidation
 	{
         public BaseAddImageVMValidation() : base()
         {
-        }
+            RuleFor(x => x.Image).NotEmpty().WithMessage("Image is required.");
+		}
     }
 }

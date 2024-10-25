@@ -27,10 +27,10 @@ namespace BookStore.Controllers
 		{
 			if(statusCode == 404)
 			{
-				return View("~/Views/Shared/NotFound.cshtml");
+				return View("~/Views/Shared/ErrorViews/NotFound.cshtml");
 			}else if(statusCode == 500)
 			{
-				return View("~/Views/Shared/InternalServerError.cshtml");
+				return View("~/Views/Shared/ErrorViews/InternalServerError.cshtml");
 			}
 			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 		}

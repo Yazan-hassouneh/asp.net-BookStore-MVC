@@ -1,0 +1,59 @@
+﻿@model UpdateAuthorVM
+@{
+	ViewData["Title"] = "Update Author";
+}
+@section Header {
+    Author
+}
+
+<h2 class="text-center my-5">Update Category @Model.Name</h2>
+
+<section>
+	<form asp-controller="Author" asp-action="Update" method="post" enctype="multipart/form-data">
+		<div class="row">
+			<div class="col-12 col-md-6">
+				<div class="">
+					<label asp-for="Name" class="form-label mt-4">Game Title</label>
+					<input asp-for="Name" type="text" class="form-control" placeholder="Enter Author Name">
+					<small class="form-text text-muted"><span asp-validation-for="Name" class="text-danger"></span></small>
+				</div>
+
+				<div class="">
+					<label asp-for="Description" class="form-label mt-4">Description</label>
+					<textarea asp-for="Description" class="form-control" rows="3"></textarea>
+					<small class="form-text text-muted"><span asp-validation-for="Description" class="text-danger"></span></small>
+				</div>
+
+				<div class="">
+					<label asp-for="Image" class="form-label mt-4">Choose Cover</label>
+					<input asp-for="Image"
+						   type="file" class="form-control"
+						   data-rule-extension="@FileSettings.ImagesAllowedExtension.Replace(".", string.Empty)"
+						   data-msg-extension="Not Allowed Extension"
+						   data-rule-maxsize="@FileSettings.ImagesMaxSizeInBytes"
+						   data-msg-maxsize="File Is Too Big, Choose File With Size Less Than @{
+							@FileSettings.ImagesMaxSizeInMB
+}MB">
+					<small class="form-text text-muted d-block"><span asp-validation-for="Image" class="text-danger"></span></small>
+				</div>
+
+			</div>
+
+			<div class="col-12 col-md-6">
+				<img src="@($"{FileSettings.AuthorsImagesPath}{Model.ImagePath}")" alt="Cover Preview" id="ImagePreview" class="w-100 object-fit-cover" />
+			</div>
+
+		</div>
+
+		<div class="mt-5">
+			<button class="btn btn-primary" type="submit">Update</button>
+		</div>
+
+	</form>
+</section>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial"></partial>
+	<script src="~/lib/jquery-validation/dist/additional-methods.min.js"></script>
+	<script src="~/js/Image.js"></script>
+}

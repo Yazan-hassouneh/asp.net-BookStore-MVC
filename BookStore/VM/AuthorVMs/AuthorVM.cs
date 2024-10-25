@@ -1,6 +1,7 @@
 ﻿namespace BookStore.VM.AuthorVMs
 {
-    public class AuthorVM
+    public class AuthorVM : BaseUpdateVM
     {
+        public int NumberOfBooks { get; set; }
     }
 }
