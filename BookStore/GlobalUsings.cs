@@ -8,3 +8,6 @@ global using Microsoft.AspNetCore.Mvc;
 global using BookStore.VM.CategoryVMs;
 global using BookStore.VM.BaseVMs;
 global using BookStore.VM.AuthorVMs;
+global using BookStore.VM.PublisherVMs;
+global using BookStore.VM.BookVMs;
+global using BookStore.VM.AuthVMs.Role;

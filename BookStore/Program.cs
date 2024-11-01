@@ -5,8 +5,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using BookStore.Configuration.VMValidation.CategoriesVMValidation;
 using BookStore.Configuration.VMValidation.AuthorVMValidation;
-using BookStore.VM.PublisherVMs;
 using BookStore.Configuration.VMValidation.PublisherNMValidation;
+using BookStore.Configuration.VMValidation.BookValidation;
+using BookStore.Configuration.VMValidation.AuthVMValidation.RoleVMValidation;
 
 namespace BookStore
 {
@@ -22,8 +23,11 @@ namespace BookStore
 				options.UseSqlServer(connectionString));
 			builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-			builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+			builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+				.AddRoles<IdentityRole>()
 				.AddEntityFrameworkStores<ApplicationDbContext>();
+			//builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+			//	.AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultUI();
 			builder.Services.AddControllersWithViews();
 
 			///	Implement Repository Pattern 
@@ -32,6 +36,8 @@ namespace BookStore
 			// Auto mapper
 			builder.Services.AddAutoMapper(typeof(CategoryProfile));
 			builder.Services.AddAutoMapper(typeof(AuthorProfile));
+			builder.Services.AddAutoMapper(typeof(PublisherProfile));
+			builder.Services.AddAutoMapper(typeof(BookProfile));
 			// Fluent Validation
 			builder.Services.AddFluentValidationAutoValidation();
 			builder.Services.AddFluentValidationClientsideAdapters();
@@ -41,6 +47,9 @@ namespace BookStore
 			builder.Services.AddScoped<IValidator<CreateAuthorVM>, CreateAuthorVMValidation>();			
 			builder.Services.AddScoped<IValidator<UpdatePublisherVM>, UpdatePublisherVMValidation>();
 			builder.Services.AddScoped<IValidator<CreatePublisherVM>, CreatePublisherVMValidation>();
+			builder.Services.AddScoped<IValidator<CreateBookVM>, CreateBookVMValidation>();
+			builder.Services.AddScoped<IValidator<UpdateBookVM>, UpdateBookVMValidation>();
+			builder.Services.AddScoped<IValidator<RoleFormVM>, RoleFormVMValidation>();
 
 			var app = builder.Build();
 

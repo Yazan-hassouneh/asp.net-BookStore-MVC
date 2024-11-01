@@ -42,8 +42,7 @@ namespace BookStore.Controllers
 		{
 			//Validate Vm
 			var modelResult = _createPublisherValidator.Validate(vm);
-
-			if (AddErrorToModelResult(modelResult) || await NameValidate(vm.Name)) return View(vm);
+			if (AddErrorToModelResult(modelResult) || await NameValidate(vm.Id, vm.Name)) return View(vm);
 
 			string imageName = await _ImageMethods.SaveImage(vm.Image);
 			try
@@ -73,7 +72,7 @@ namespace BookStore.Controllers
 		{
 			var modelResult = _updatePublisherValidator.Validate(vm);
 
-			if (AddErrorToModelResult(modelResult) || await NameValidate(vm.Name))
+			if (AddErrorToModelResult(modelResult) || await NameValidate(vm.Id, vm.Name))
 			{
 				var UpdatePublisherVm = await UpdatePublisher(vm.Id);
 				if (UpdatePublisherVm is null) return NotFound();
@@ -133,23 +132,25 @@ namespace BookStore.Controllers
 		{
 			if (!modelResult.IsValid)
 			{
-				AddErrorToModelResult(modelResult);
-			}
-			foreach (var error in modelResult.Errors)
-			{
-				ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+				foreach (var error in modelResult.Errors)
+				{
+					ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+				}
+				return true;
 			}
 			return !modelResult.IsValid;
 		}
-		private async Task<bool> NameValidate(string name)
+		private async Task<bool> NameValidate(int id, string name)
 		{
 			bool isExist = await _unitOfWork.Publishers.CheckName(name);
-
-			if (isExist)
+			if (!isExist) return isExist;
+			Publisher? publisher = await _unitOfWork.Publishers.FindAsync(x => x.Name == name);
+			if (isExist && publisher?.Id != id)
 			{
 				ModelState.AddModelError("Name", "The Publisher Already Exist");
+				return true;
 			}
-			return isExist;
+			return !isExist;
 		}
 		private async Task<UpdatePublisherVM> UpdatePublisher(int id)
 		{

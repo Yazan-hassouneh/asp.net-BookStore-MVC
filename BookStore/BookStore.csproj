@@ -19,13 +19,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Repository\BookRepo\" />
-    <Folder Include="Repository\AuthorRepo\" />
     <Folder Include="Views\Shared\Partials\" />
+    <Folder Include="VM\AuthVMs\User\" />
     <Folder Include="wwwroot\Assets\Img\CategoriesImages\" />
     <Folder Include="wwwroot\Assets\Img\BooksImages\" />
     <Folder Include="wwwroot\Assets\Img\AuthorsImages\" />
     <Folder Include="wwwroot\Assets\Img\PublishersImages\" />
+    <Folder Include="wwwroot\css\Book\" />
   </ItemGroup>
 
 </Project>

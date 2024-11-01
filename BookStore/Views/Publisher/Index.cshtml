@@ -1,0 +1,71 @@
+﻿@model List<PublisherVM>
+
+@{
+    ViewData["Title"] = "Publishers";
+    var numberOfEntities = 1;
+}
+@section Header {
+    Publishers
+}
+
+<section class="w-100 mx-2">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Publishers List</h1>
+        <div>
+            <a class="btn btn-primary d-flex" asp-controller="Publisher" asp-action="Add"><span>Add New Publisher</span> <span class="ms-2 fs-5"><i class="bi bi-plus"></i></span></a>
+        </div>
+    </div>
+
+    @if (Model.Count() < 1)
+    {
+        <div class="alert alert-dismissible alert-info">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <div class="d-inline-block  d-flex align-items-center">
+                <i class="bi bi-exclamation-triangle"></i>
+                <div class="ms-3">Sorry, No Publishers Has Been Found</div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Publisher Name</th>
+                    <th scope="col">Number Of Books</th>
+                    <th scope="col">location</th>
+                    <th scope="col" class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var author in Model)
+                {
+                    <tr id="row-@author.Id">
+                        <th scope="row">@numberOfEntities</th>
+                        <td>@author.Name</td>
+                        <td>@author.NumberOfBooks</td>
+                        <td>@author.Location</td>
+                        <td class="d-flex justify-content-center align-items-center">
+                            <a asp-action="Update" asp-route-id="@author.Id" class="btn text-primary" title="Edit"><i class="bi bi-pencil-square"></i></a>
+                            <a asp-action="Details" asp-route-id="@author.Id" class="btn text-info" title="Details"><i class="bi bi-three-dots-vertical"></i></a>
+                            <a href="#" id="@author.Id" class="btn text-danger deleteBtn" title="Delete"><i class="bi bi-trash3-fill"></i></a>
+                        </td>
+                    </tr>
+                    numberOfEntities++;
+                }
+            </tbody>
+        </table>
+    }
+</section>
+
+@section Styles {
+    <link href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet" />
+    <link href="~/lib/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+}
+@section Scripts {
+    <script src="~/lib/sweetalert2/sweetalert2.all.min.js"></script>
+    <script src="~/js/Component/CloseAlert.js" asp-append-version="true"></script>
+    <script src="~/js/DeleteImgScripts/DeleteImage.js" asp-append-version="true" type="module"></script>
+    <script src="~/js/DeleteImgScripts/DeletePublisher.js" asp-append-version="true" type="module"></script>
+}

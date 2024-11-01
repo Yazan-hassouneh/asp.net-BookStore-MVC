@@ -1,0 +1,79 @@
+﻿@model List<BookVM>
+
+@{
+    ViewData["Title"] = "Books";
+    var numberOfEntities = 1;
+}
+@section Header {
+    Books
+}
+
+<section class="w-100 mx-2">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Books List</h1>
+        <div>
+            <a class="btn btn-primary d-flex" asp-controller="Book" asp-action="Add"><span>Add New Book</span> <span class="ms-2 fs-5"><i class="bi bi-plus"></i></span></a>
+        </div>
+    </div>
+
+    @if (Model.Count() < 1)
+    {
+        <div class="alert alert-dismissible alert-info">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <div class="d-inline-block  d-flex align-items-center">
+                <i class="bi bi-exclamation-triangle"></i>
+                <div class="ms-3">Sorry, No Books Has Been Found</div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Book Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Authors</th>
+                    <th scope="col">Category</th>
+                    <th scope="col" class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var book in Model)
+                {
+                    <tr id="row-@book.Id">
+                        <th scope="row">@numberOfEntities</th>
+                        <td>@book.Name</td>
+                        <td>@book.Price</td>
+                        @{
+                            var author = book.Authors.Count() > 1 ? $"{book.Authors[0]} And Other" : book.Authors[0];
+                        }
+                        <td>@author</td>
+                        @{
+                            var category = book.Categories.Count() > 1 ? $"{book.Categories[0]} And Other" : book.Categories[0];
+                        }
+                        <td>@category</td>
+                        <td class="d-flex justify-content-center align-items-center">
+                            <a asp-action="Update" asp-route-id="@book.Id" class="btn text-primary" title="Edit"><i class="bi bi-pencil-square"></i></a>
+                            <a asp-action="Details" asp-route-id="@book.Id" class="btn text-info" title="Details"><i class="bi bi-three-dots-vertical"></i></a>
+                            <a href="#" id="@book.Id" class="btn text-danger deleteBtn" title="Delete"><i class="bi bi-trash3-fill"></i></a>
+                        </td>
+                    </tr>
+                    numberOfEntities++;
+                }
+            </tbody>
+        </table>
+    }
+</section>
+
+@section Styles {
+    <link href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet" />
+    <link href="~/lib/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+}
+@section Scripts {
+    <script src="~/lib/sweetalert2/sweetalert2.all.min.js"></script>
+    <script src="~/js/Component/CloseAlert.js" asp-append-version="true"></script>
+    <script src="~/js/DeleteImgScripts/DeleteImage.js" asp-append-version="true" type="module"></script>
+    <script src="~/js/DeleteImgScripts/DeleteBook.js" asp-append-version="true" type="module"></script>
+}

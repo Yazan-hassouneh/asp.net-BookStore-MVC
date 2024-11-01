@@ -9,17 +9,17 @@ namespace BookStore.Repository.BaseRepo
     {
         private readonly ApplicationDbContext _context = context;
 
-        public async Task<T?> GetByIdAsync(int id)
+        public virtual async Task<T?> GetByIdAsync(int id)
         {
             return await _context.Set<T>().FindAsync(id);
         }        
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public virtual async Task<IEnumerable<T>> GetAllAsync()
         {
             return await _context.Set<T>().ToListAsync();
         }
         public async Task<T?> FindAsync(Expression<Func<T, bool>> matcher)
         {
-            return await _context.Set<T>().AsNoTracking().SingleOrDefaultAsync(matcher);
+            return await _context.Set<T>().AsNoTracking().FirstOrDefaultAsync(matcher);
         }        
         public async Task<T?> FindAsync(Expression<Func<T, bool>> matcher, string[] Includes)
         {

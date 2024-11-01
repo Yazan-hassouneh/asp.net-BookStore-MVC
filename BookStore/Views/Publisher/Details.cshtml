@@ -1,0 +1,22 @@
+﻿@model PublisherVM
+
+@{
+	ViewData["Title"] = $"{Model.Name}";
+}
+@section Header {
+    Authors
+}
+<div class="mb-5 d-sm-flex justify-content-between align-items-center">
+	<h1>@Model.Name</h1>
+	<div class="mt-sm-0 mt-3">
+		<span>@Model.Name  Has Published : <strong>@Model.NumberOfBooks</strong> Books</span>
+	</div>
+</div>
+
+
+<div class="row">
+	<p class="col-12 col-md-5">@Model.Description</p>
+	<div class="col-12 col-md-6 offset-md-1">
+		<img src="@($"{FileSettings.PublishersImagesPath}{Model.ImagePath}")" alt="@Model.Name Image" class="img-fluid" />
+	</div>
+</div>

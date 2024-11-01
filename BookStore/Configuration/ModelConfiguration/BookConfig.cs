@@ -11,6 +11,7 @@ namespace BookStore.Configuration.ModelConfiguration
         {
             base.Configure(builder);
             builder.ToTable(x => x.HasCheckConstraint("Price", "Price >= 1"));
+            builder.Property(x => x.ReleaseYear).IsRequired();
         }
     }
 }

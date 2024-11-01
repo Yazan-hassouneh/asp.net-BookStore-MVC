@@ -44,7 +44,7 @@ namespace BookStore.Controllers
             //Validate Vm
             var modelResult = _createCategoryValidator.Validate(vm);
 
-			if (AddErrorToModelResult(modelResult) || await NameValidate(vm.Name)) return View(vm);
+			if (AddErrorToModelResult(modelResult) || await NameValidate(vm.Id, vm.Name)) return View(vm);
 
 			string imageName = await _ImageMethods.SaveImage(vm.Image);
             try
@@ -74,7 +74,7 @@ namespace BookStore.Controllers
         {
 			var modelResult = _updateCategoryValidator.Validate(vm);
 
-            if (AddErrorToModelResult(modelResult) || await NameValidate(vm.Name))
+            if (AddErrorToModelResult(modelResult) || await NameValidate(vm.Id, vm.Name))
             {
 				var UpdateCategoryVm = await UpdateCategory(vm.Id);
 				if (UpdateCategoryVm is null) return NotFound();
@@ -132,27 +132,29 @@ namespace BookStore.Controllers
             CategoryVM categoryVM = _mapper.Map<CategoryVM>(category);
             return View(categoryVM);
         }
-        private bool AddErrorToModelResult(ValidationResult modelResult)
-        {
+		private bool AddErrorToModelResult(ValidationResult modelResult)
+		{
 			if (!modelResult.IsValid)
 			{
-                AddErrorToModelResult(modelResult);
+				foreach (var error in modelResult.Errors)
+				{
+					ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+				}
+				return true;
 			}
-			foreach (var error in modelResult.Errors)
-			{
-				ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-			}
-            return !modelResult.IsValid;
-        }
-        private async Task<bool> NameValidate(string name)
+			return !modelResult.IsValid;
+		}
+		private async Task<bool> NameValidate(int id, string name)
         {
             bool isExist = await _unitOfWork.Categories.CheckName(name);
-
-            if (isExist)
+            if (!isExist) return isExist;
+            Category? category = await _unitOfWork.Categories.FindAsync(x => x.Name == name);
+            if (isExist && category?.Id != id)
             {
                 ModelState.AddModelError("Name", "The Category Already Exist");
+                return true;
             }
-            return isExist;
+            return !isExist;
         }
         private async Task<UpdateCategoryVM> UpdateCategory(int id)
         {

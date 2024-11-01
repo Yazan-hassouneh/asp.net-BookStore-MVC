@@ -1,0 +1,55 @@
+﻿@model BookVM
+
+@{
+	ViewData["Title"] = $"{Model.Name}";
+}
+@section Header {
+    Books
+}
+<div class="mb-5 d-sm-flex justify-content-between align-items-center">
+	<h1>@Model.Name</h1>
+	<div class="mt-sm-0 mt-3">
+		<span class="fw-bold">@Model.Price $</span>
+	</div>
+</div>
+
+
+<div class="row">
+	<div class="col-12 col-md-5 d-flex flex-column">
+		<div class="pb-3">
+			<sapn class="fw-bold d-block fs-5">@(Model.Authors.Length > 1 ? "Authors" : "Author") :</sapn>
+			@{
+				for(int i = 0; i < Model.Authors.Length; i++) 
+				{
+					<sapn class="d-block">@Model.Authors[i]</sapn>
+				}
+			}
+		</div>	
+		
+		<div class="pb-3">
+			<sapn class="fw-bold d-block fs-5">Categories : </sapn>
+			@{
+				for(int i = 0; i < Model.Categories.Length; i++) 
+				{
+					<sapn class="d-block">@Model.Categories[i]</sapn>
+				}
+			}
+		</div>	
+		
+		<div class="pb-3">
+			<sapn class="fw-bold d-block">Publisher : </sapn>
+			<sapn class="d-block">@Model.PublisherName</sapn>
+		</div>	
+		
+		<div class="pb-3">
+			<sapn class="fw-bold d-block">Release Year : </sapn>
+			<sapn class="d-block">@Model.ReleaseYear</sapn>
+		</div>
+
+		<p>@Model.Description</p>
+
+	</div>
+	<div class="col-12 col-md-6 offset-md-1">
+		<img src="@($"{FileSettings.BooksImagesPath}{Model.ImagePath}")" alt="@Model.Name Image" class="img-fluid" />
+	</div>
+</div>
