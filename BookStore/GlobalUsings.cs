@@ -11,3 +11,4 @@ global using BookStore.VM.AuthorVMs;
 global using BookStore.VM.PublisherVMs;
 global using BookStore.VM.BookVMs;
 global using BookStore.VM.AuthVMs.Role;
+global using BookStore.VM.AuthVMs.User;

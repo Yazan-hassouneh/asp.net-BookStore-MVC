@@ -4,6 +4,7 @@ using BookStore.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookStore.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241102031902_AlterUserAddress")]
+    partial class AlterUserAddress
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,7 +69,6 @@ namespace BookStore.Data.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("PasswordHash")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
@@ -137,7 +139,7 @@ namespace BookStore.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Authors", (string)null);
+                    b.ToTable("Authors");
                 });
 
             modelBuilder.Entity("BookStore.Models.Book", b =>
@@ -185,7 +187,7 @@ namespace BookStore.Data.Migrations
 
                     b.HasIndex("PublisherId");
 
-                    b.ToTable("Books", null, t =>
+                    b.ToTable("Books", t =>
                         {
                             t.HasCheckConstraint("Price", "Price >= 1");
                         });
@@ -203,7 +205,7 @@ namespace BookStore.Data.Migrations
 
                     b.HasIndex("AuthorId");
 
-                    b.ToTable("BookAuthor", (string)null);
+                    b.ToTable("BookAuthor");
                 });
 
             modelBuilder.Entity("BookStore.Models.BookCategory", b =>
@@ -218,7 +220,7 @@ namespace BookStore.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("BookCategory", (string)null);
+                    b.ToTable("BookCategory");
                 });
 
             modelBuilder.Entity("BookStore.Models.Category", b =>
@@ -258,7 +260,7 @@ namespace BookStore.Data.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("BookStore.Models.Publisher", b =>
@@ -303,7 +305,7 @@ namespace BookStore.Data.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Publishers", (string)null);
+                    b.ToTable("Publishers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

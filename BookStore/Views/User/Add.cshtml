@@ -1,0 +1,66 @@
+﻿@model ApplicationUserFormVM
+@{
+	ViewData["Title"] = "Add New User";
+}
+@section Header {
+    Users
+}
+
+<h2 class="text-center my-5">New User</h2>
+
+<section>
+	<form asp-controller="User" asp-action="Add" method="post" enctype="multipart/form-data">
+		<div class="row">
+			<div class="col-12 col-md-6">
+				<div class="">
+					<label asp-for="UserName" class="form-label mt-4">Name</label>
+					<input asp-for="UserName" type="text" class="form-control" placeholder="Enter Your Name">
+					<small class="form-text text-muted"><span asp-validation-for="UserName" class="text-danger"></span></small>
+				</div>
+
+				<div class="">
+					<label asp-for="Email" class="form-label mt-4">Email</label>
+					<input asp-for="Email" type="email" class="form-control" placeholder="User Email">
+					<small class="form-text text-muted"><span asp-validation-for="Email" class="text-danger"></span></small>
+				</div>
+
+				<div class="">
+					<label asp-for="PasswordHash" class="form-label mt-4">Password</label>
+					<input asp-for="PasswordHash" type="password" class="form-control" placeholder="*******">
+					<small class="form-text text-muted"><span asp-validation-for="PasswordHash" class="text-danger"></span></small>
+				</div>
+
+				<div class="">
+					<label asp-for="Address" class="form-label mt-4">Address</label>
+					<input asp-for="Address" type="password" class="form-control" placeholder="Your Address">
+					<small class="form-text text-muted"><span asp-validation-for="Address" class="text-danger"></span></small>
+				</div>
+
+				<div class="">
+					<label asp-for="RolesList" class="form-label mt-4">Roles</label>
+					<select asp-for="RolesList" asp-items="Model.RolesSelectList" class="form-select js-example-basic-multiple" multiple="multiple">
+					</select>
+					<small class="form-text text-muted"><span asp-validation-for="RolesList" class="text-danger"></span></small>
+				</div>
+
+			</div>
+
+		</div>
+
+		<div class="mt-5">
+			<button class="btn btn-primary" type="submit">Add</button>
+		</div>
+
+	</form>
+</section>
+
+@section Styles {
+	<link href="~/lib/select2/css/select2.min.css" rel="stylesheet" />
+}
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial"></partial>
+	<script src="~/lib/jquery-validation/dist/additional-methods.min.js"></script>
+	<script src="~/lib/select2/js/select2.min.js"></script>
+	<script src="~/js/ApplaySelectList/ApplaySelectList2.js" asp-append-version="true"></script>
+}

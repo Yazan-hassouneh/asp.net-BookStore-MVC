@@ -21,6 +21,7 @@ namespace BookStore.Data
             base.OnModelCreating(builder);
 			builder.ApplyConfiguration(new RoleConfig());
 			builder.ApplyConfiguration(new BookConfig());
+			builder.ApplyConfiguration(new UserConfig());
 			builder.ApplyConfiguration(new AuthorConfig());
 			builder.ApplyConfiguration(new CategoryConfig());
 			builder.ApplyConfiguration(new PublisherConfig());

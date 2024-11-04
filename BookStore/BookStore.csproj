@@ -16,11 +16,11 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.4" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.6" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Views\Shared\Partials\" />
-    <Folder Include="VM\AuthVMs\User\" />
     <Folder Include="wwwroot\Assets\Img\CategoriesImages\" />
     <Folder Include="wwwroot\Assets\Img\BooksImages\" />
     <Folder Include="wwwroot\Assets\Img\AuthorsImages\" />

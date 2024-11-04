@@ -8,6 +8,8 @@ using BookStore.Configuration.VMValidation.AuthorVMValidation;
 using BookStore.Configuration.VMValidation.PublisherNMValidation;
 using BookStore.Configuration.VMValidation.BookValidation;
 using BookStore.Configuration.VMValidation.AuthVMValidation.RoleVMValidation;
+using BookStore.VM.AuthVMs.User;
+using BookStore.Configuration.VMValidation.AuthVMValidation.UserValidation;
 
 namespace BookStore
 {
@@ -38,6 +40,7 @@ namespace BookStore
 			builder.Services.AddAutoMapper(typeof(AuthorProfile));
 			builder.Services.AddAutoMapper(typeof(PublisherProfile));
 			builder.Services.AddAutoMapper(typeof(BookProfile));
+			builder.Services.AddAutoMapper(typeof(UserProfile));
 			// Fluent Validation
 			builder.Services.AddFluentValidationAutoValidation();
 			builder.Services.AddFluentValidationClientsideAdapters();
@@ -50,6 +53,7 @@ namespace BookStore
 			builder.Services.AddScoped<IValidator<CreateBookVM>, CreateBookVMValidation>();
 			builder.Services.AddScoped<IValidator<UpdateBookVM>, UpdateBookVMValidation>();
 			builder.Services.AddScoped<IValidator<RoleFormVM>, RoleFormVMValidation>();
+			builder.Services.AddScoped<IValidator<ApplicationUserFormVM>, ApplicationUserFromVMValidation>();
 
 			var app = builder.Build();
 

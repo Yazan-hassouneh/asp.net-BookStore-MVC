@@ -129,15 +129,15 @@ namespace BookStore.Controllers
 		}
         private bool AddErrorToModelResult(ValidationResult modelResult)
         {
-            if (!modelResult.IsValid)
-            {
-                AddErrorToModelResult(modelResult);
-            }
-            foreach (var error in modelResult.Errors)
-            {
-                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-            }
-            return !modelResult.IsValid;
-        }
+			if (!modelResult.IsValid)
+			{
+				foreach (var error in modelResult.Errors)
+				{
+					ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+				}
+				return true;
+			}
+			return !modelResult.IsValid;
+		}
     }
 }

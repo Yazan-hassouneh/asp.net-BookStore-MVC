@@ -9,3 +9,4 @@
 ApplaySelect2("#CategoriesId", "Select Category")
 ApplaySelect2("#AuthorsId", "Select Author")
 ApplaySelect2("#PublisherId", "Select Publisher")
+ApplaySelect2("#RolesList", "Select Role")

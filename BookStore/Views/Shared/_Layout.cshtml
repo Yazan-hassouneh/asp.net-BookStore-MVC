@@ -7,7 +7,7 @@
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="~/Dashboard/fontawesome-free/css/all.min.css"  asp-append-version="true">
+     <link rel="stylesheet" href="~/Dashboard/fontawesome-free/css/all.min.css"  asp-append-version="true">
     <!-- Theme style -->
     @await RenderSectionAsync("Styles", required : false)
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/FlatlyBootstrapTheme.min.css"  asp-append-version="true"/>
@@ -192,8 +192,14 @@
                         </li>                         
                         <li class="nav-item">
                             <a asp-controller="Role" asp-action="Index" class="nav-link">
-                                <i class="nav-icon fas fa-home"></i>
+                                <i class="nav-icon fas fa-briefcase"></i>
                                 <p>Roles</p>
+                            </a>
+                        </li>                          
+                        <li class="nav-item">
+                            <a asp-controller="User" asp-action="Index" class="nav-link">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>Users</p>
                             </a>
                         </li>                        
                         <li class="nav-item">

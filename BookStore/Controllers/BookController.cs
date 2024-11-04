@@ -44,7 +44,11 @@ namespace BookStore.Controllers
         {
             //Validate Vm
             var modelResult = _createBookValidator.Validate(vm);
-            if (AddErrorToModelResult(modelResult)) return View(vm);
+            if (AddErrorToModelResult(modelResult))
+            {
+				AddSelectListItems(vm);
+				return View(vm);
+			}
             string imageName = await _ImageMethods.SaveImage(vm.Image);
 
             try
@@ -86,9 +90,13 @@ namespace BookStore.Controllers
         public async Task<IActionResult> Update(UpdateBookVM vm)
         {
             var modelResult = _updateBookValidator.Validate(vm);
-            if (AddErrorToModelResult(modelResult)) return View(vm);
+			if (AddErrorToModelResult(modelResult))
+			{
+				AddSelectListItems(vm);
+				return View(vm);
+			}
 
-            Book? book = await _unitOfWork.Books.FindAsync(x => x.Id == vm.Id);
+			Book? book = await _unitOfWork.Books.FindAsync(x => x.Id == vm.Id);
             if (book == null) BadRequest(ModelState);
 
             bool hasNewImage = vm.Image is not null;
